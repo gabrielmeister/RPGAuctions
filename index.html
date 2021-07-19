@@ -96,7 +96,7 @@ function makeGCalLink() {
   var link;
 
   link = 'http://www.google.com/calendar/event?action=TEMPLATE';
-  link += '&dates=' + encodeURIComponent( formatCalDate( $('#inFromDate').val() ) + '/' + formatCalDate( $('#inToDate').val() ) );
+  link += '&dates=' + encodeURIComponent( formatCalDate( $('#inFromDate').val() ) + '/' + formatCalDate( $('#inFromDate').val() ) );
   link += '&text=' + encodeURIComponent( $('#inTitle').val() );
   link += '&location=' + encodeURIComponent( $('#inLocation').val() );
   link += '&details=' + encodeURIComponent( $('#inDetails').val() );
@@ -110,38 +110,11 @@ function makeGCalLink() {
 $(document).ready(function() {
 
   var initFromTime = new Date();
-  initFromTime.setMinutes(60);
-  initToTime = new Date(initFromTime.getTime());
-  initToTime.setHours(initToTime.getHours() + 1 );
+  initFromTime.setMinutes(0);
 
   $("#inFromDate").val( defaultConv.format( initFromTime ) ).change();
-  $("#inToDate").val( defaultConv.format( initToTime ) ).change();
 
   $('#inFromDate').AnyTime_picker( { format: dateDisplayFormat } );
-  $('#inToDate').AnyTime_picker( { earliest: initFromTime, format: dateDisplayFormat } );
-
-  $("#inFromDate").change(
-    function(e) {
-      try {
-
-        var earliestTime = defaultConv.parse($("#inFromDate").val());
-        var toTime = new Date(earliestTime);
-        toTime.setMinutes(toTime.getMinutes() + 60);
-
-        $("#inToDate").
-          AnyTime_noPicker().
-          val(defaultConv.format(toTime)).
-          AnyTime_picker(
-              { earliest: earliestTime,
-                format: dateDisplayFormat
-              } );
-
-      } catch(e){
-        $("#inToDate").val("");
-      }
-    }
-  );
-
 
   $('#makeGCalLink').click(function() {
     makeGCalLink();
